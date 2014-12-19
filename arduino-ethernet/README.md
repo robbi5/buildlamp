@@ -4,7 +4,7 @@ This is a pretty easy way to setup a ethernet ready Buildlamp, just plug in a ne
 
 ## Requirements
 ### Parts
-See [Parts Comparison](/robbi5/buildlamp/wiki/Part-Comparison) for a general idea of what you'll need.
+See [Parts Comparison](https://github.com/robbi5/buildlamp/wiki/Part-Comparison) for a general idea of what you'll need.
 
 ### Libraries
 get [mthread](https://github.com/jlamothe/mthread)
