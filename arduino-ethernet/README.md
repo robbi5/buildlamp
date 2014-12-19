@@ -20,11 +20,11 @@ This buildlamp was build with this in depth [Guide](https://learn.adafruit.com/a
 
 ## LED Test
 
-[led test sketch](./ledTest.idn)
+[led test sketch](./ledTest.ino)
 
 ## Webserver Test
 
-[webserver sketch](../webserverTest.idn)
+[webserver sketch](./webserverTest.ino)
 you may have to configure IP and MAC Address. Then open that IP on your browser. You lamp should change color now
 
 ## ColorServer Code and Documentation
