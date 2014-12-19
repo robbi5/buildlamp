@@ -14,7 +14,7 @@ and import them into your Arduino IDE
 ## Construction How To
 This buildlamp was build with this in depth [Guide](https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library) with the same power source for the arduino as the NeoPixels. The guide tells you everything about construction, libraries and programming the arduino.
 
-![fritzing SVG](./docs/arduino_neopixel.svg)
+![fritzing SVG](./docs/arduino_neopixel.png)
 
 ![real image](./docs/board.jpg)
 
