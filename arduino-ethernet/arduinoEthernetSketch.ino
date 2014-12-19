@@ -1,92 +1,121 @@
+//Threads
+//
+//
 #include <mthread.h>
 #include <Adafruit_NeoPixel.h>
 #include <SPI.h>
 #include <Ethernet.h>
 
-//
-// from pin 6 to your pixels Data Input
 #define PIN 6
-// how many pixels should animate, can be lower than the number of attached pixels
-int maxPixels = 8;
+
+// Parameter 1 = number of pixels in strip
+// Parameter 2 = pin number (most are valid)
 // Parameter 3 = pixel type flags, add together as needed:
 //   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
 //   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
 //   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(maxPixels, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
 
-
-// lightning effect animation on your pixels
-class Lightning : public Thread {
-  public:
-    Lightning();
-  protected:
-    bool loop();
-};
-Lightning::Lightning() {}
-bool Lightning::loop() {
-  lightning();
-  long time = random(70, 360);
-  Serial.print("sleep long: ");
-  Serial.println(time);
-  this->sleep(time);
-  return true; 
-}
-
-// TODO DHCP
-// Ethernet Webserver
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,178,177);
+
 EthernetServer server(80);
 
-class WebServer : public Thread {
-  public:
-    WebServer();
-  protected:
-    bool loop();
+class MainThread : public Thread {
+public:
+  MainThread();
+protected:
+  bool loop();
 };
-WebServer::WebServer() {}
-bool WebServer::loop() {
-  colorServer();
+
+//Definition des Konstruktors
+MainThread::MainThread()
+{
+}
+
+//Definition der Threadschleife
+bool MainThread::loop()
+{
+  // Die if requested:
+  if(kill_flag)
+    return false;
+  
+  sparkle();
+  Serial.print("sleep long");
+  this->sleep_micro(random(70000,200000));
+  delay(5000);
   return true; 
 }
 
-// crackle and fade to black animation
-class Blackout : public Thread {
-  public:
-    Blackout();
-  protected:
-    bool loop();
+class ColorListener : public Thread {
+public:
+  ColorListener();
+protected:
+  bool loop();
 };
-Blackout::Blackout() {}
-bool Blackout::loop() {
+
+//Definition des Konstruktors
+ColorListener::ColorListener()
+{
+}
+
+//Definition der Threadschleife
+bool ColorListener::loop()
+{
+  // Die if requested:
+  if(kill_flag)
+    return false;
+  
+  colorServer();
+
+  return true; 
+}
+
+class Blackout : public Thread {
+public:
+  Blackout();
+protected:
+  bool loop();
+};
+
+//Definition des Konstruktors
+Blackout::Blackout()
+{
+}
+
+//Definition der Threadschleife
+bool Blackout::loop()
+{
+  // Die if requested:
+  if(kill_flag)
+    return false;
+  
   blackout();
+
   return false; 
 }
- 
+
 void setup() {
-  
-  // for serial monitor
-  Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-  }
-  
   // start the Ethernet connection and the server:
-  Ethernet.begin(mac, ip);
+  Ethernet.begin(mac);
   server.begin();
-  main_thread_list->add_thread(new WebServer());
-  
   Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
-  
-  //setup the pixels
-  strip.begin();
-  strip.show();  
 
-  // lighning indicates the WebServer is running
-  main_thread_list->add_thread(new Lightning()); 
+  Serial.begin(9600);
+  main_thread_list->add_thread(new ColorListener());
+  main_thread_list->add_thread(new MainThread()); 
+  
+  
+  strip.begin();
+  uint32_t a = strip.Color(random(10,200),random(10,200),random(10,200));
+  strip.setPixelColor(random(0,6), a);
+  strip.show();  
 }
+
+
+
+// SERVER ////
 
 void colorServer() {
   EthernetClient client = server.available();
@@ -103,10 +132,10 @@ void colorServer() {
         // so you can send a reply
         if (c == '\n' && currentLineIsBlank) {
           int r,g,b = 0;
-          // req should contain "GET /color/"
-          if (req.indexOf("color/") > -1) {
-          	// TODO /color/AABBCC/
-            // RGB Values from 0 to 255 like "GET /color/rrrgggbbb"
+          Serial.println(req);
+          // req should contein "GET /?color="
+          if (req.indexOf("color=") > -1) {
+            // RGB Values from 0 to 255 like "GET /?color=rrrgggbbb"
             char s[4] = {req.charAt(11),req.charAt(12),req.charAt(13)};
             r= String(s).toInt();
             char t[4] = {req.charAt(14),req.charAt(15),req.charAt(16)};
@@ -140,32 +169,55 @@ void colorServer() {
       }
     }
     // give the web browser time to receive the data
-    delay(1);
+    delay(100);
     // close the connection:
     client.stop();
     Serial.println("client disconnected");
   }
 }
 
+int getValue(String s) {
+  return s.toInt();
+}
+
 //NEOPIXEL ////
+
 void setColor(int r, int g, int b) {
+  Serial.println(r);
+  Serial.println(g);
+  Serial.println(b);
   for(int i = 0 ; i <= 8; i +=1) { 
-        strip.setBrightness(255);
-        strip.setPixelColor(i, strip.Color(r, g, b));
-        strip.show();        
+    strip.setBrightness(255);
+    strip.setPixelColor(i, strip.Color(r, g, b));
+    strip.show();        
   }
 }
 
-uint32_t a = strip.Color(10, 30, 75);
-uint32_t b = strip.Color(120, 180, 100);
 
-// the magic of randomness
-// r is is a variating global value, which should stay between 0 and 255
+void thriller(){
+  
+  for (int j = 0 ; j<=20; j+=3) {
+    int i = random(j, 20);  
+    for(int fadeValue = 0 ; fadeValue <= 5; fadeValue +=1) { 
+      strip.setPixelColor(fadeValue, strip.Color(i*3,100 - 20*i,2*i +50));
+      strip.setPixelColor(5-fadeValue, strip.Color(i*10, 200 - 20*i,2*i +10));
+      strip.show();        
+      delay(30);                            
+    }    
+    
+  }
+}
+
 int r = 175;
+uint32_t a = strip.Color(random(10,200)+40,random(10,200),random(10,200));
+uint32_t b = strip.Color(220, 220, 220);
+
+
 void variate() {
   int varianz = 150;
   r = r - (varianz / 2);
   r = r + random(varianz);
+  
   if (r>255) {
     r = 255;
   }
@@ -174,25 +226,27 @@ void variate() {
   }
 }
 
-void lightning() {
+void sparkle() {
   
   variate();
-	int brightness = random(20, 40);
-	int crackles = random(15, 35);
-	int fade = (255 - brightness) / (crackles - 3);
+  int br = random(20, 40);
+  int crackles = random(15, 35);
+  int fade = (255 - br) / (crackles - 3);
+  
+  
   for(int i = 0 ; i <= crackles; i +=1) { 
-    brightness += fade;
-    strip.setBrightness(brightness);
+    br += fade;
+    strip.setBrightness(br);
     strip.setPixelColor(random(0,8), a - (b/20));
     strip.setPixelColor(random(0,8), strip.Color(10,30,10+r));
     strip.show();
     delay(random(30,100));                            
   } 
-    variate();
+  variate();
     // fade in from min to max in increments of 5 points:
   for(int j = 0 ; j <= crackles; j +=1) { 
-    brightness -= fade;
-    strip.setBrightness(brightness);
+    br -= fade;
+    strip.setBrightness(br);
     strip.setPixelColor(random(0,8), a + (b/20));
     strip.setPixelColor(random(0,8), strip.Color(10,255-r,10+r));
     strip.show();
@@ -202,19 +256,19 @@ void lightning() {
   
 }
 void blackout() {
-   
+ 
   variate();
-   
-  for(int brightness = 120 ; brightness > 0; brightness -= 4) { 
-    strip.setBrightness(brightness);
+  
+  for(int br = 120 ; br > 0; br -= 4) { 
+    strip.setBrightness(br);
     strip.setPixelColor(random(0,8), a + (b/20));
     strip.setPixelColor(random(0,8), strip.Color(10,255-r,10+r));
     strip.show();
     delay(20);
   } 
   for (int i; i <8 ; i+=1) {
-     strip.setBrightness(0);
-     strip.setPixelColor(i, strip.Color(0,0,0));
-  }  
-  strip.show();                           
+   strip.setBrightness(0);
+   strip.setPixelColor(i, strip.Color(0,0,0));
+ }  
+ strip.show();                           
 }
