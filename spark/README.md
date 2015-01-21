@@ -1,3 +1,4 @@
+# buildlamp — Spark Core and NeoPixels variant
 ## Required Parts
 
 * [Spark Core Prototyping Bundle](https://store.spark.io/?product=prototyping-bundle) (includes breadboard, also gets you an Spark Photon for the next generation buildlamp)
@@ -12,9 +13,7 @@
 * Solder the break-away headers on your breadboard friendly NeoPixels or the NeoPixel Stick
 
 ### Assemble on Breadboard
-![spark-neopixel-breadboard](https://cloud.githubusercontent.com/assets/172415/5819579/32925982-a0bf-11e4-972f-549e74845e50.png)
-![spark-neopixel-453](https://cloud.githubusercontent.com/assets/172415/5835355/d44bec72-a167-11e4-91bf-c99b1a6cf410.jpg)
-
+![spark-neopixel-breadboard](https://cloud.githubusercontent.com/assets/172415/5819579/32925982-a0bf-11e4-972f-549e74845e50.png) ![spark-neopixel-453](https://cloud.githubusercontent.com/assets/172415/5835355/d44bec72-a167-11e4-91bf-c99b1a6cf410.jpg)
 
 ### Setup your Spark Core
 Visit https://www.spark.io/start and proceed until you get to "Put Code on Your Core"
