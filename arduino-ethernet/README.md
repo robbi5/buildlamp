@@ -1,40 +1,45 @@
-## About
-
-This is a pretty easy way to setup a ethernet ready Buildlamp, just plug in a network cable and you can change color and animation via GET Request.
-
+# buildlamp — Arduino Ethernet and NeoPixels variant
 ## Requirements
 ### Parts
-See [Parts Comparison](https://github.com/robbi5/buildlamp/wiki/Part-Comparison) for a general idea of what you'll need.
+* [Arduino Ethernet](http://arduino.cc/en/Main/ArduinoBoardEthernet)
+* [USB Serial Adapter](http://arduino.cc/en/Main/USBSerial) for programming the Arduino Ethernet
+* 7-12V power supply
+* [NeoPixel Stick](http://www.adafruit.com/products/1426) or multiple [breadboard friendly NeoPixels](http://www.adafruit.com/products/1312)
+* [Break-away headers](http://www.adafruit.com/products/392) for soldering on neopixels
+* [breadboard](http://www.adafruit.com/products/65)
+* [breadboard wires](http://www.adafruit.com/products/153)
 
 ### Libraries
-get [mthread](https://github.com/jlamothe/mthread)
-and [Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)
-and import them into your Arduino IDE
+Import the following libraries into your Arduino IDE:
+* [mthread](https://github.com/jlamothe/mthread)
+* [Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)
 
 ## Construction How To
-This buildlamp was build with this in depth [Guide](https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library) with the same power source for the arduino as the NeoPixels. The guide tells you everything about construction, libraries and programming the arduino.
 
-![fritzing SVG](./docs/arduino_neopixel.png)
+### Preparing the NeoPixels
+* Solder the break-away headers on your breadboard friendly NeoPixels or the NeoPixel Stick
 
-![real image](./docs/board.jpg)
+### Connect on breadboard
 
-## LED Test
+Look at this [in depth Guide](https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library) how to connect the NeoPixels to the arduino.
 
-[led test sketch](./ledTest.ino)
+![fritzing SVG](./docs/arduino_neopixel.png) ![real image](./docs/board.jpg)
 
-## Webserver Test
+### Upload Code to the Arduino
 
-[webserver sketch](./webserverTest.ino)
-you may have to configure IP and MAC Address. Then open that IP on your browser. You lamp should change color now
+Connect the Arduino with the USB Serial Adapter to your computer. Open the [buildlamp sketch](./buildlamp.ino) and change the lines marked with `// FIXME`. Then upload the sketch to the Arduino.
 
-## ColorServer Code and Documentation
+### Setup Jenkins Job
 
-### TODO - Jenkins ready colorServer
-[Link zu dem Webserver API](../arduinoEthernetSketch/colorserver/server.sketch)
+Open your Jenkins instance, go to _Manage Jenkins_ > _Manage Plugins_ and install the [_Groovy Postbuild_](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin) plugin.
 
+Create a new View that contains all the jobs you want to summarize the build status on the lamp.
 
+Create a new Job (type: _Freestyle project_) with following settings:
+* Source Code Management: none
+* Build Triggers: Build periodically, Schedule: "`* * * * *`"
+* Build > Add Build step: Execute groovy script. Copy the contents of [/jenkins/buildlamp.groovy](/robbi5/buildlamp/blob/master/jenkins/buildlamp.groovy) in the Groovy command text box and change the `FIXME` values.
 
+### Look at your lamp
 
-
- 
-
+If its no longer blue, *party*! :tada: 
