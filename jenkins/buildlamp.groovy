@@ -1,5 +1,6 @@
 def sparkDeviceId = "FIXME";
 def sparkAccessToken = "FIXME";
+def jenkinsViewName = "FIXME";
 
 def build = Thread.currentThread().executable;
 println("buildLamp system Groovy script");
@@ -8,7 +9,7 @@ def somethingIsBuilding = false;
 def badProjectsMap = [:];
 println("-------");
 
-hudson.model.Hudson.instance.getView("OnTestLamp").getItems().each { i ->
+hudson.model.Hudson.instance.getView(jenkinsViewName).getItems().each { i ->
   print(i.getName());
 
   if (i.class.getName().is("hudson.maven.MavenModule")) {
