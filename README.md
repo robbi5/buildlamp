@@ -3,7 +3,7 @@
 ## buildlamp — visual notifications everywhere
 * wireless
 * programmable
-* beatiful
+* beautiful
 
 ### What we wanted
 
