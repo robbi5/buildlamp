@@ -20,7 +20,7 @@ Visit https://www.spark.io/start and proceed until you get to "Put Code on Your 
 
 ### Upload buildlamp code on the Spark Core
 In the Spark Web IDE, press the "Create new App" button and give it a name.
-Then copy the latest code from [/spark/buildlamp.ino](/robbi5/buildlamp/blob/master/spark/buildlamp.ino). 
+Then copy the latest code from [/spark/buildlamp.ino](../spark/buildlamp.ino). 
 
 Now you have to add the NeoPixels library: Click on Libraries, search for NeoPixel, press the "Include in App" button and select your app.
 
@@ -41,7 +41,7 @@ Create a new View that contains all the jobs you want to summarize the build sta
 Create a new Job (type: _Freestyle project_) with following settings:
 * Source Code Management: none
 * Build Triggers: Build periodically, Schedule: "`* * * * *`"
-* Build > Add Build step: Execute groovy script. Copy the contents of [/jenkins/buildlamp.groovy](/robbi5/buildlamp/blob/master/jenkins/buildlamp.groovy) in the Groovy command text box and change the `FIXME` values.
+* Build > Add Build step: Execute groovy script. Copy the contents of [/jenkins/buildlamp.groovy](../jenkins/buildlamp.groovy) in the Groovy command text box and change the `FIXME` values.
 
 ### Look at your lamp
 
