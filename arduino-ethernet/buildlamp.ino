@@ -155,7 +155,7 @@ void ci(WebServer &server, WebServer::ConnectionType type, char *, bool) {
   } while (lastPos < args.length());
   
   server.httpSuccess("application/json");
-  server.printf("{\"returnValue\": %s}", somethingInteresting);
+  server.printf("{\"returnValue\": %d}", somethingInteresting);
   return;
 }
 
@@ -170,14 +170,14 @@ void setup() {
   Serial.begin(9600);
   strip.begin();
   
-  // FIXME: color for connecting.
+  strip.setPixelColor(0, strip.Color(255,255,255));
+  strip.show();
   
   // start the Ethernet connection and the server:
-  Ethernet.begin(mac);
-
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
-    // FIXME: color for failure.
+    strip.setPixelColor(0, Wheel(RED));
+    strip.show();
     for(;;)
       ;
   }
@@ -189,7 +189,7 @@ void setup() {
     Serial.print("."); 
   }
   Serial.println();
-
+  
   webserver.setDefaultCommand(&hello);
   webserver.addCommand("ci", &ci);
   webserver.begin();
