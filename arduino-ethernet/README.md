@@ -39,7 +39,7 @@ Create a new View that contains all the jobs you want to summarize the build sta
 Create a new Job (type: _Freestyle project_) with following settings:
 * Source Code Management: none
 * Build Triggers: Build periodically, Schedule: "`* * * * *`"
-* Build > Add Build step: Execute groovy script. Copy the contents of [/jenkins/buildlamp.groovy](/robbi5/buildlamp/blob/master/jenkins/buildlamp.groovy) in the Groovy command text box and change the `FIXME` values.
+* Build > Add Build step: Execute groovy script. Copy the contents of [/jenkins/buildlamp.groovy](../jenkins/buildlamp.groovy) in the Groovy command text box and change the `FIXME` values.
 
 ### Look at your lamp
 
