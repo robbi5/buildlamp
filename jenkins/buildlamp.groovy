@@ -13,6 +13,7 @@ def somethingIsBuilding = false;
 def badProjectsMap = [:];
 if (buildlampVariant != "SPARK" && buildlampVariant != "ARDUINO") {
   println("FAILURE: buildlampVariant is undefined. Please look at the Groovy Source again.");
+  build.setResult(hudson.model.Result.FAILURE);
   return;
 }
 println("-------");
