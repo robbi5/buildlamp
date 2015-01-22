@@ -13,6 +13,7 @@
 Import the following libraries into your Arduino IDE:
 * [mthread](https://github.com/jlamothe/mthread)
 * [Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)
+* [Webduino](https://github.com/sirleech/Webduino)
 
 ## Construction How To
 
