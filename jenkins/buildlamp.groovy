@@ -1,12 +1,20 @@
+def jenkinsViewName = "FIXME";
+def buildlampVariant = "FIXME"; // use SPARK or ARDUINO
+// if your buildlamp is the spark variant:
 def sparkDeviceId = "FIXME";
 def sparkAccessToken = "FIXME";
-def jenkinsViewName = "FIXME";
+// if your buildlamp is the arduino variant:
+def arduinoIP = "FIXME";
 
 def build = Thread.currentThread().executable;
 println("buildLamp system Groovy script");
 def lampResult = hudson.model.Result.SUCCESS;
 def somethingIsBuilding = false;
 def badProjectsMap = [:];
+if (buildlampVariant != "SPARK" && buildlampVariant != "ARDUINO") {
+  println("FAILURE: buildlampVariant is undefined. Please look at the Groovy Source again.");
+  return;
+}
 println("-------");
 
 hudson.model.Hudson.instance.getView(jenkinsViewName).getItems().each { i ->
@@ -71,12 +79,22 @@ if (badProjectsMap.size() > 0) {
 }
 
 def phase = somethingIsBuilding ? "STARTED" : "FINISHED";
-def reqData = "&access_token=" + sparkAccessToken + "&args=${lampResultStr},${phase}";
+def reqData = "&args=${lampResultStr},${phase}";
+if (buildlampVariant == "SPARK") {
+  reqData = "&access_token=" + sparkAccessToken + reqData;
+}
 
 print("sending Data: ");
 println(reqData);
 
-def url = new URL("https://api.spark.io/v1/devices/" + sparkDeviceId + "/ci");
+def buildlampUrl = "";
+if (buildlampVariant == "SPARK") {
+  buildlampUrl = "https://api.spark.io/v1/devices/" + sparkDeviceId + "/ci";
+} else if (buildlampVariant == "ARDUINO") {
+  buildlampUrl = "http://" + arduinoIP + "/ci";
+}
+
+def url = new URL(buildlampUrl);
 def connection = url.openConnection();
 connection.connectTimeout = 10000 ;
 connection.setRequestMethod("POST");
