@@ -13,7 +13,7 @@ We wanted a noticeable feedback when some jobs from our Continous Integration (J
 
 ...is exactly this (and more). Since 2012 we built and tried different lamps with a web interface and wifi connection. The latest versions in this repository are affordable and easy to build.
 
-The lamps are have a HTTP API so you can control them with the [jenkins job](/jenkins) or change the color, let them fade and blink in your own applications.
+The lamps do have a HTTP API so you can control them with [jenkins jobs](/jenkins), change their color, let them fade and blink.
 
 ### What you find in this repository
 
