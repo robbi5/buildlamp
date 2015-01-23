@@ -15,7 +15,7 @@ We wanted a noticeable feedback when some jobs from our Continous Integration (J
 
 The lamps are have a HTTP API so you can control them with the [jenkins job](/jenkins) or change the color, let them fade and blink in your own applications.
 
-### What's to find here
+### What you find in this repository
 
 In the subfolders you can find different types of buildlamps and a manual to make them Jenkins ready. Additionally, the HTTP API makes it easy to use the lamps for all kind of purposes, like a "do not disturb" lamp, or a lamp which shows your computers cpu temperature or... — you can most likely think of better uses.
 
