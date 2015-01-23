@@ -1,19 +1,19 @@
 ![buildlamp](http://buildlamp.org/img/buildlamp-banner.jpg)
 
-## buildlamp — visual notifications everywhere
+## buildlamp — visual build notifications everywhere
 * wireless
 * programmable
 * beautiful
 
 ### What we wanted
 
-We wanted a noticeable feedback when some jobs from our Continous Integration (Jenkins) failed. When anything goes horribly wrong, the whole office is alerted by a light turning red.
+We wanted a noticeable feedback when some jobs from our Continous Integration (Jenkins) failed. When anything goes horribly wrong, the whole office should be alerted by a light turning red.
 
 ### What we got
 
-...is exactly this (and more). We built and tried different lamps with a web interface and wlan connection and felt, this is pretty easy and affordable. 
+...is exactly this (and more). Since 2012 we built and tried different lamps with a web interface and wifi connection. The latest versions in this repository are affordable and easy to build.
 
-The lamps are easy to build and have a HTTP API so you can remotly change the color and brightness or let them fade and blink.
+The lamps are have a HTTP API so you can control them with the [jenkins job](/jenkins) or change the color, let them fade and blink in your own applications.
 
 ### What's to find here
 
